@@ -17,12 +17,12 @@ function onAddItemSubmit(e){
         return;
     }
 
-        //Create Item DOM element
+    //Create Item DOM element
     addItemToDOM(newItem);
 
     //Add item to local storage
     addItemToStorage(newItem);
-    
+
     checkUI();
 
     itemInput.value = '';
@@ -43,7 +43,7 @@ function addItemToDOM (item){
 }
 
 function addItemToStorage(item){
-    let itemsFromStorage;
+    let itemsFromStorage = getItemsFromStorage();
 
     if (localStorage.getItem('items') === null){
         itemsFromStorage = [];
@@ -56,6 +56,18 @@ function addItemToStorage(item){
 
     //Convert back to string so we can put in local storage
     localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+}
+
+function getItemsFromStorage(){
+    let itemsFromStorage;
+
+    if (localStorage.getItem('items') === null){
+        itemsFromStorage = [];
+    } else {
+        itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+    }
+
+    return itemsFromStorage;
 }
 
 // Create Button
@@ -115,14 +127,24 @@ function filterItems (e){
 }
 }
 
-// Local Storage
+// Display Items from Local Storage
 
+function displayItems(){
+    const itemsFromStorage = getItemsFromStorage();
+    itemsFromStorage.forEach(item => addItemToDOM(item));
+    checkUI();
+}
 
+// Initialize App - to not show them on global scope
 
+function init(){
 //Event Listeners
 itemForm.addEventListener('submit', onAddItemSubmit);
 itemList.addEventListener('click', removeItem);
 clearBtn.addEventListener('click', clearItems);
 itemFilter.addEventListener('input', filterItems);
-
+document.addEventListener('DOMContentLoaded', displayItems);
 checkUI();
+}
+
+init();
