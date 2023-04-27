@@ -3,7 +3,8 @@ const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
 const clearBtn = document.getElementById('clear');
 const itemFilter = document.getElementById('filter');
-const heading = document.querySelector('h1');
+const formBtn = itemForm.querySelector('button');
+let isEditMode = false;
 
 
 function onAddItemSubmit(e){
@@ -89,7 +90,21 @@ function createIcon(classes){
 function onClickItem(e){
     if (e.target.parentElement.classList.contains('remove-item')){
         removeItem(e.target.parentElement.parentElement);
+    } else {
+        setItemToEdit(e.target);
     }
+}
+
+function setItemToEdit(item){
+    isEditMode = true;
+
+    itemList.querySelectorAll('li').forEach(i => i.classList.remove('edit-mode'));
+
+    item.classList.add('edit-mode');
+    formBtn.innerHTML = '<i class= "fa-solid fa-pen"></i> Update Item'; 
+    formBtn.style.backgroundColor = 'green';
+    itemInput.value = item.textContent;
+
 }
 
 // Remove Items
